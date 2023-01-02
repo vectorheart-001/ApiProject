@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace ApiProject.Domain.Entities
 {
-    public class RefreshToken:BaseEntity
+    public class AnimeWatchList:BaseEntity
     {
-        public string Token { get; set; }
         public Guid UserId { get; set; }
-        
+        public virtual User User { get; set; }
+        public string AnimeId { get; set; }
+        public virtual Anime Anime { get; set; }
+        public bool IsWatched { get; set; }
     }
 }

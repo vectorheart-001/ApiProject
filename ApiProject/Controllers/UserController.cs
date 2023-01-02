@@ -7,10 +7,10 @@ namespace ApiProject.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        [Authorize(Roles = "Admin")]
-        public void GetSet()
+        [HttpGet]
+        public async Task<OkResult> GetSmth()
         {
-            
+             return Ok();
         }
     }
 }

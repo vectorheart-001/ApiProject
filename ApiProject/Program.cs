@@ -1,11 +1,13 @@
 using ApiProject.Api.Authentication.TokenGenerators;
 using ApiProject.Api.Authentication.TokenValidators;
 using Microsoft.IdentityModel.Tokens;
+using ApiProject.Infrastructure.CSVDataInsertion;
 using ApiProject.Api;
 using System.Text;
 using ApiProject.Infrastructure;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,11 +23,10 @@ builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 //JWT Token configuration
 //DbContext
-
 AuthenticationConfiguration authenticationConfiguration = new AuthenticationConfiguration();
 //TODO:Bind authenticationConfiguration to JWT Token settings from User secrets;
 builder.Services.AddSingleton(authenticationConfiguration);
-builder.Configuration.Bind("Authentication",authenticationConfiguration);
+builder.Configuration.Bind("Authentication", authenticationConfiguration);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters()
@@ -47,7 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+var scoped = app.Services.CreateScope();
+DatabaseSeeder.Initialize(scoped.ServiceProvider.GetService<ApiAppContext>());
 app.UseHttpsRedirection();
 app.UseAuthentication();
 

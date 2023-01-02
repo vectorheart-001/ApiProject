@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApiProject.Domain.Enums
 {
-    internal class Roles
+    public class Roles
     {
         public enum Role
         {

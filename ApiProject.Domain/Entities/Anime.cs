@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 
 namespace ApiProject.Domain.Entities
 {
-    public sealed class Anime:BaseEntity
+    public sealed class Anime
     {
+        public string Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string Genres { get; set; }
+        public string Genre { get; set; }
+        public string Type { get; set; }
+        public string Episodes { get; set; }
+        public float Rating { get; set; }
+        public int Members { get; set; }
     }
 }
