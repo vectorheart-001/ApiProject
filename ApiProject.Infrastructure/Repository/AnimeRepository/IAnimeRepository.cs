@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiProject.Domain.Primitives
+namespace ApiProject.Infrastructure.Repository.AnimeRepository
 {
-    public abstract class BaseEntity
+    internal interface IAnimeRepository
     {
-        public Guid Id { get; set; }
+
     }
 }

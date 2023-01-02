@@ -20,9 +20,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 //JWT Token configuration
+//DbContext
+
 AuthenticationConfiguration authenticationConfiguration = new AuthenticationConfiguration();
 //TODO:Bind authenticationConfiguration to JWT Token settings from User secrets;
 builder.Services.AddSingleton(authenticationConfiguration);
+builder.Configuration.Bind("Authentication",authenticationConfiguration);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters()

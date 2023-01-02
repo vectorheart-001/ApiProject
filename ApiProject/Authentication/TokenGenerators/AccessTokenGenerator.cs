@@ -22,6 +22,8 @@ namespace ApiProject.Api.Authentication.TokenGenerators
                 new Claim(ClaimTypes.Name,user.Name),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim("password",user.Password),
+                new Claim(ClaimTypes.Role,user.Role.ToString()),
+               
             };
             SecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.AccessTokenSecret));
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
