@@ -19,7 +19,7 @@ namespace ApiProject.Api.Authentication.TokenGenerators
             {
                 new Claim("id",user.Id.ToString()),
             };
-            SecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.AccessTokenSecret));
+            SecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.RefreshTokenSecret));
             SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken token = new JwtSecurityToken(_configuration.Issuer,

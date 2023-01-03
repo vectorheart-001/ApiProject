@@ -23,7 +23,9 @@ namespace ApiProject.Infrastructure.Repository.RefreshTokenRepository
 
         public async Task Delete(Guid id)
         {
-            await _context.Database.ExecuteSqlRawAsync($"DELETE FROM POSTS WHERE ID = {id}");
+            var token = _context.RefreshTokens.Find(id);
+            _context.Remove(token);
+            _context.SaveChanges();
         }
 
         public async Task DeleteAll(Guid userId)
