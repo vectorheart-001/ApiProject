@@ -7,10 +7,6 @@ namespace ApiProject.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public async Task<OkResult> GetSmth()
-        {
-             return Ok();
-        }
+       
     }
 }
