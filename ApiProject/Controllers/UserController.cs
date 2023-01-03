@@ -1,5 +1,6 @@
 using ApiProject.Api.Authentication.TokenGenerators;
 using ApiProject.Api.Authentication.TokenValidators;
+using ApiProject.Domain.DTOs;
 using ApiProject.Domain.Entities;
 using ApiProject.Infrastructure.Repository.RefreshTokenRepository;
 using ApiProject.Infrastructure.Repository.UserRepository;
@@ -49,14 +50,8 @@ namespace ApiProject.Controllers
                 return Conflict();
             }
 
-
-            User user = new User()
-            {
-                Email = request.Email,
-                Name = request.Name,
-                Password = request.Password,
-            };
-            await _userRepository.Create(user);
+            await _userRepository.Create(request);
+           
             return Ok();
         }
 
@@ -99,7 +94,7 @@ namespace ApiProject.Controllers
             }
             await _refreshTokenRepository.Delete(refreshTokenDTO.Id);
             User user = await _userRepository.GetById(refreshTokenDTO.UserId);
-            AuthenticatedUserResponse authenticatedUser = await _authenticator.Authenticate(user);
+            AuthenticatedResponse authenticatedUser = await _authenticator.Authenticate(user);
             return Ok(authenticatedUser);
         }
         [Authorize]

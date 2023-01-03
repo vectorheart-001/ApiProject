@@ -4,6 +4,8 @@ using ApiProject.Infrastructure.Repository.AnimeRepository;
 using Microsoft.EntityFrameworkCore;
 using ApiProject.Infrastructure.CSVDataInsertion;
 using ApiProject.Infrastructure.Repository.RefreshTokenRepository;
+using Microsoft.EntityFrameworkCore.Metadata;
+using ApiProject.Infrastructure.Repository.UserRepository;
 
 namespace ApiProject.Infrastructure
 {
@@ -14,6 +16,7 @@ namespace ApiProject.Infrastructure
             services.AddDbContext<ApiAppContext>();
             services.AddTransient<IAnimeRepository,AnimeRepository>();
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             return services;
         }
     }

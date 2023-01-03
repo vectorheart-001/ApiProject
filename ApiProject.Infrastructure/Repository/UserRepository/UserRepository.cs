@@ -1,4 +1,7 @@
-﻿using ApiProject.Domain.Entities;
+﻿using ApiProject.Domain.DTOs;
+using ApiProject.Domain.Enums;
+using ApiProject.Domain.Entities;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,8 +19,15 @@ namespace ApiProject.Infrastructure.Repository.UserRepository
             _context = context;
         }
 
-        public async Task Create(User user)
+        public async Task Create(UserRegisterRequest request)
         {
+            User user = new User()
+            {
+                Email = request.Email,
+                Name = request.Name,
+                Password = request.Password,
+                Role = Roles.Role.User
+            };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
         }
