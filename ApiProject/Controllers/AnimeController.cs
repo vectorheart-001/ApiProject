@@ -33,7 +33,7 @@ namespace ApiProject.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAnime(string id,AnimeEditDTO anime)
         {
-            if (await _animeRepository.Exist(id) == false)
+            if (await _animeRepository.Exists(id) == false)
             {
                 return BadRequest();
             }

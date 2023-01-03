@@ -17,6 +17,6 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         Task<Anime> GetById(Guid id);
         Task<Tuple<List<Anime>,string>> GetAll(int page = 1);
         Task Edit(string id,Anime anime);
-        Task<bool> Exist(string id);
+        Task<bool> Exists(string id);
     }
 }

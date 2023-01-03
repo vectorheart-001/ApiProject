@@ -67,11 +67,11 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
             editAnime.Rating = anime.Rating;
             editAnime.Members = anime.Members;
             _context.Update(editAnime);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
 
-        public async Task<bool> Exist(string id)
+        public async Task<bool> Exists(string id)
         {
             return await _context.Animes.AnyAsync(x => x.Id == id);
         }
