@@ -1,4 +1,4 @@
-﻿using ApiProject.Domain.DTOs;
+﻿using ApiProject.Domain.DTOs.UserDTO;
 using ApiProject.Domain.Entities;
 using System;
 using System.Collections.Generic;

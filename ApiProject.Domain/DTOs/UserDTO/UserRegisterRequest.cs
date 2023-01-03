@@ -5,13 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiProject.Domain.DTOs
+namespace ApiProject.Domain.DTOs.UserDTO
 {
-    public class UserLoginRequest
+    public class UserRegisterRequest
     {
         [Required]
         public string Name { get; set; }
         [Required]
+        public string Email { get; set; }
+        [Required]
+        [MinLength(8)]
         public string Password { get; set; }
+        [Required]
+        public string ConfirmPassword { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using ApiProject.Domain.DTOs;
-using ApiProject.Domain.Enums;
+﻿using ApiProject.Domain.Enums;
 using ApiProject.Domain.Entities;
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApiProject.Domain.DTOs.UserDTO;
 
 namespace ApiProject.Infrastructure.Repository.UserRepository
 {

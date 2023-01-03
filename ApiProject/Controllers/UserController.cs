@@ -1,6 +1,6 @@
 using ApiProject.Api.Authentication.TokenGenerators;
 using ApiProject.Api.Authentication.TokenValidators;
-using ApiProject.Domain.DTOs;
+using ApiProject.Domain.DTOs.UserDTO;
 using ApiProject.Domain.Entities;
 using ApiProject.Infrastructure.Repository.RefreshTokenRepository;
 using ApiProject.Infrastructure.Repository.UserRepository;
