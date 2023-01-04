@@ -57,6 +57,7 @@ namespace ApiProject.Api.Controllers
         {
              return Ok(await _animeWatchListRepository.ViewList(userId));
         }
+        
 
     }
 }

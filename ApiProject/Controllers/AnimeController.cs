@@ -5,6 +5,9 @@ using ApiProject.Infrastructure.Repository.AnimeRepository;
 using ApiProject.Infrastructure.Repository.UserRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ApiProject.Api.Controllers
 {
@@ -41,12 +44,13 @@ namespace ApiProject.Api.Controllers
         }
         [HttpPut("edit-anime")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> EditAnime(string id,AnimeEditDTO anime)
+        public async Task<IActionResult> EditAnime(string id,[FromBody]AnimeEditDTO anime)
         {
             if (await _animeRepository.Exists(id) == false)
             {
                 return BadRequest();
             }
+            await _animeRepository.Edit(id,anime);
             return Ok();
         }
         [HttpGet("get-by-genre")]
@@ -58,6 +62,14 @@ namespace ApiProject.Api.Controllers
                 return BadRequest();
             }
             return Ok(list);
+        }
+        [HttpGet("get-stats")]
+        public async Task<FileContentResult> GetAnimeStats()
+        {
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            var bytes = await _animeRepository.TextFileStats();
+            return File(bytes,"text/txt","stats.txt");
         }
     }
 }

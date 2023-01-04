@@ -1,10 +1,12 @@
-﻿using ApiProject.Domain.Entities;
+﻿using ApiProject.Domain.DTOs.AnimeDTO;
+using ApiProject.Domain.Entities;
 using Azure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +61,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
 
         }
 
-        public async Task Edit(string id, Anime anime)
+        public async Task Edit(string id, AnimeEditDTO anime)
         {
             var editAnime = await _context.Animes.FindAsync(id);
             editAnime.Name = anime.Name;
@@ -76,6 +78,32 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         public async Task<bool> Exists(string id)
         {
             return await _context.Animes.AnyAsync(x => x.Id == id);
+        }
+        public async Task<byte[]> TextFileStats()
+        {
+            var query = _context.Animes;
+            var totalAnime = query.Count();
+            var animeByRomaanceGenre = query.Where(x => x.Genre == "Romance").Count();
+            var animeByActionGenre = query.Where(x => x.Genre == "Action").Count();
+            var animeByComedyGenre = query.Where(x => x.Genre == "Comedy").Count();
+            var animeByDramaGenre = query.Where(x => x.Genre == "").Count();
+            var path = System.IO.Directory.GetCurrentDirectory() + @"\stats.txt";
+            if (!File.Exists(path))
+            {
+                File.Create("stats.txt");
+            }
+            using (StreamWriter streamWriter = new StreamWriter(path))
+            {
+                streamWriter.WriteLine($"Total anime: {totalAnime}");
+                streamWriter.WriteLine($"Anime by romane genre anime: {animeByRomaanceGenre}");
+                streamWriter.WriteLine($"Anime by romane genre anime: {animeByActionGenre}");
+                streamWriter.WriteLine($"Anime by romane genre anime: {animeByComedyGenre}");
+                streamWriter.WriteLine($"Anime by romane genre anime: {animeByDramaGenre}");
+            }
+            return await File.ReadAllBytesAsync(path);
+            
+
+
         }
     }
 }

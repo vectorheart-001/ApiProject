@@ -1,4 +1,5 @@
 ﻿using ApiProject.Domain.DTOs;
+using ApiProject.Domain.DTOs.AnimeDTO;
 using ApiProject.Domain.Entities;
 using Azure;
 using System;
@@ -16,7 +17,8 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         
         Task<Anime> GetById(Guid id);
         Task<Tuple<List<Anime>,int>> GetAll(int page = 1);
-        Task Edit(string id,Anime anime);
+        Task Edit(string id,AnimeEditDTO anime);
         Task<bool> Exists(string id);
+        Task<byte[]> TextFileStats();
     }
 }
