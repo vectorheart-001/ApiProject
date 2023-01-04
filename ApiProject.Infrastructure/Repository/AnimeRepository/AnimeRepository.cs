@@ -83,24 +83,27 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         {
             var query = _context.Animes;
             var totalAnime = query.Count();
-            var animeByRomaanceGenre = query.Where(x => x.Genre == "Romance").Count();
-            var animeByActionGenre = query.Where(x => x.Genre == "Action").Count();
-            var animeByComedyGenre = query.Where(x => x.Genre == "Comedy").Count();
-            var animeByDramaGenre = query.Where(x => x.Genre == "").Count();
+            var animeByRomaanceGenre = query.Where(x => x.Genre.Contains("Romance")).Count();
+            var animeByActionGenre = query.Where(x => x.Genre.Contains("Action")).Count();
+            var animeByComedyGenre = query.Where(x => x.Genre.Contains("Comedy")).Count();
+            var animeByDramaGenre = query.Where(x => x.Genre.Contains("Drama")).Count();
             var path = System.IO.Directory.GetCurrentDirectory() + @"\stats.txt";
             if (!File.Exists(path))
             {
-                File.Create("stats.txt");
+                Task.Run(() => File.Create("stats.txt"));
+                
             }
             using (StreamWriter streamWriter = new StreamWriter(path))
             {
                 streamWriter.WriteLine($"Total anime: {totalAnime}");
-                streamWriter.WriteLine($"Anime by romane genre anime: {animeByRomaanceGenre}");
-                streamWriter.WriteLine($"Anime by romane genre anime: {animeByActionGenre}");
-                streamWriter.WriteLine($"Anime by romane genre anime: {animeByComedyGenre}");
-                streamWriter.WriteLine($"Anime by romane genre anime: {animeByDramaGenre}");
+                streamWriter.WriteLine($"Anime by romance genre anime: {animeByRomaanceGenre}");
+                streamWriter.WriteLine($"Anime by action genre anime: {animeByActionGenre}");
+                streamWriter.WriteLine($"Anime by comedy genre anime: {animeByComedyGenre}");
+                streamWriter.WriteLine($"Anime by drama genre anime: {animeByDramaGenre}");
             }
-            return await File.ReadAllBytesAsync(path);
+
+            var byteFile = File.ReadAllBytesAsync(path);
+            return await byteFile;
             
 
 
