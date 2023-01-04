@@ -21,14 +21,15 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         }
        
 
-        public async Task<Tuple<List<Anime>, string>> GetByGenre(string genre, int page =1)
+        public async Task<Tuple<List<Anime>, int>> GetByGenre(string genre, int page)
         {
             var pageResult = 15f;
-            var pageCount = Math.Ceiling(_context.Animes.Count() / pageResult);
-            var list = await _context.Animes.Where(x => x.Name.ToLower().Contains(genre)).Skip((page - 1) * (int)pageResult)
+            var listQuery = _context.Animes.Where(x => x.Genre.ToLower().Contains(genre));
+            var list = await listQuery.Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
-            return Tuple.Create(list, $"{page}/{pageCount}");
+            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            return Tuple.Create(list, (int)pageCount);
         }
 
         public async Task<Anime> GetById(Guid id)
@@ -36,16 +37,17 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
             return await _context.Animes.FindAsync(id);
         }
 
-        public async Task<Tuple<List<Anime>, string>> GetByName(string name, int page = 1)
+        public async Task<Tuple<List<Anime>, int>> GetByName(string name, int page)
         {
             var pageResult = 15f;
-            var pageCount = Math.Ceiling(_context.Animes.Count() / pageResult);
-            var list = await _context.Animes.Where(x => x.Name.ToLower().Contains(name)).Skip((page - 1) * (int)pageResult)
+            var listQuery = _context.Animes.Where(x => x.Name.ToLower().Contains(name));
+            var list = await listQuery.Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
-            return Tuple.Create(list, $"{page}/{pageCount}");
+            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            return Tuple.Create(list, (int)pageCount);
         }
-        public async Task<Tuple<List<Anime>, string>> GetAll(int page = 1)
+        public async Task<Tuple<List<Anime>, int>> GetAll(int page )
         {
             var pageResult = 15f;
             var pageCount = Math.Ceiling(_context.Animes.Count()/ pageResult);
@@ -53,7 +55,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
                 .Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
-            return Tuple.Create(animes, $"{page}/{(int)pageCount}");
+            return Tuple.Create(animes, (int)pageCount);
 
         }
 

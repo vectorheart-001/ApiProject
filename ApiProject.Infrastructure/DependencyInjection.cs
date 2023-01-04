@@ -15,6 +15,7 @@ namespace ApiProject.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddDbContext<ApiAppContext>();
+            services.AddMemoryCache();
             services.AddTransient<IAnimeRepository,AnimeRepository>();
             services.AddTransient<IAnimeWatchListRepository, AnimeWatchListRepository>();
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();

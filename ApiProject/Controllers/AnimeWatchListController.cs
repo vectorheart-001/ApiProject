@@ -55,7 +55,7 @@ namespace ApiProject.Api.Controllers
         
         public async Task<IActionResult> ViewList(Guid userId)
         {
-            return Ok(await _animeWatchListRepository.ViewList(userId));
+             return Ok(await _animeWatchListRepository.ViewList(userId));
         }
 
     }

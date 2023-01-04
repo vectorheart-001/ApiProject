@@ -22,12 +22,22 @@ namespace ApiProject.Api.Controllers
         [HttpGet("get-by-name")]
         public async Task<IActionResult> GetByName(string name,int page =1)
         {
-            return Ok(await _animeRepository.GetByName(name,page =1));
+            var list = await _animeRepository.GetByName(name,page);
+            if (list.Item2 < page || page < 0)
+            {
+                return BadRequest();
+            }
+            return Ok(list);
         }
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll([FromQuery] int page)
         {
-            return Ok(await _animeRepository.GetAll(page));
+            var list = await _animeRepository.GetAll(page);
+            if (list.Item2 < page || page < 0)
+            {
+                return BadRequest();
+            }
+            return Ok(list);
         }
         [HttpPut("edit-anime")]
         [Authorize(Roles = "Admin")]
@@ -40,9 +50,14 @@ namespace ApiProject.Api.Controllers
             return Ok();
         }
         [HttpGet("get-by-genre")]
-        public async Task<IActionResult> GetByGenre(string genre,int page = 1)
+        public async Task<IActionResult> GetByGenre(string genre,int page)
         {
-            return Ok(await _animeRepository.GetByName(genre,page));
+            var list = await _animeRepository.GetByGenre(genre, page);
+            if (list.Item2 < page || page < 0)
+            {
+                return BadRequest();
+            }
+            return Ok(list);
         }
     }
 }

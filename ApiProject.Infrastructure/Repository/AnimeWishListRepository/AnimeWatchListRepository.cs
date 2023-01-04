@@ -1,18 +1,23 @@
 ﻿using ApiProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.Extensions.Caching;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
 {
     public class AnimeWatchListRepository : IAnimeWatchListRepository
     {
         protected readonly ApiAppContext _context;
-        public AnimeWatchListRepository(ApiAppContext context)
+        protected readonly IMemoryCache _memoryCache;
+
+        public AnimeWatchListRepository(IMemoryCache memoryCache,ApiAppContext context)
         {
+            _memoryCache = memoryCache;
             _context = context;
         }
         public async Task AddToList(Guid userId, string animeId)
@@ -43,7 +48,17 @@ namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
 
         public async Task<List<AnimeWatchList>> ViewList(Guid userId)
         {
-            return await _context.AnimeWatchLists.Where(x => x.UserId == userId).ToListAsync();
+            List<AnimeWatchList> list;
+            list = _memoryCache.Get<List<AnimeWatchList>>("anime-watchlist");
+            if(list == null)
+            {
+                list = new();
+                list = await _context.AnimeWatchLists.Include(x => x.Anime)
+                    .Where(x => x.UserId == userId)
+                    .ToListAsync();
+                _memoryCache.Set("anime-watchlist", list,TimeSpan.FromHours(3));
+            }
+            return list;
         }
     }
 }
