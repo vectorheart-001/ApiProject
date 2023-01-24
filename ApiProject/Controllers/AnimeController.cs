@@ -68,8 +68,9 @@ namespace ApiProject.Api.Controllers
         {
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
 
-            var bytes = await _animeRepository.TextFileStats();
-            return File(bytes,"text/txt","stats.txt");
+            var bytes = await _animeRepository.PdfFileStats();
+            return File(bytes, "application/pdf", "stats.pdf");
         }
+        
     }
 }

@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,7 +81,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         {
             return await _context.Animes.AnyAsync(x => x.Id == id);
         }
-        public async Task<byte[]> TextFileStats()
+        public async Task<byte[]> PdfFileStats()
         {
             var query = _context.Animes;
             var totalAnime = query.Count();
@@ -87,20 +89,44 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
             var animeByActionGenre = query.Where(x => x.Genre.Contains("Action")).Count();
             var animeByComedyGenre = query.Where(x => x.Genre.Contains("Comedy")).Count();
             var animeByDramaGenre = query.Where(x => x.Genre.Contains("Drama")).Count();
-            var path = System.IO.Directory.GetCurrentDirectory() + @"\stats.txt";
-            if (!File.Exists(path))
+            var path = System.IO.Directory.GetCurrentDirectory() + @"\stats.pdf";
+            Document.Create(container =>
             {
-                Task.Run(() => File.Create("stats.txt"));
-                
-            }
-            using (StreamWriter streamWriter = new StreamWriter(path))
-            {
-                streamWriter.WriteLine($"Total anime: {totalAnime}");
-                streamWriter.WriteLine($"Anime by romance genre anime: {animeByRomaanceGenre}");
-                streamWriter.WriteLine($"Anime by action genre anime: {animeByActionGenre}");
-                streamWriter.WriteLine($"Anime by comedy genre anime: {animeByComedyGenre}");
-                streamWriter.WriteLine($"Anime by drama genre anime: {animeByDramaGenre}");
-            }
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(20));
+
+                    page.Header()
+                        .Text("Some stats about anime from us")
+                        .SemiBold().FontSize(36).FontColor(Colors.Blue.Medium);
+
+                    page.Content()
+                        .PaddingVertical(1, Unit.Centimetre)
+                        .Column(x =>
+                        {
+                            x.Spacing(20);
+
+                            x.Item().Text($"Total amount of anime:{totalAnime}");
+                            x.Item().Text($"Amount of action animes:{animeByActionGenre}");
+                            x.Item().Text($"Amount of comedy animes:{animeByComedyGenre}");
+                            x.Item().Text($"Amount of drama animes:{animeByDramaGenre}");
+                            x.Item().Text($"Amount of romance animes:{animeByRomaanceGenre}");
+                            x.Item().Image(Placeholders.Image(200, 100));
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(x =>
+                        {
+                            x.Span("Page ");
+                            x.CurrentPageNumber();
+                        });
+                });
+            })
+            .GeneratePdf("stats.pdf");
 
             var byteFile = File.ReadAllBytesAsync(path);
             return await byteFile;

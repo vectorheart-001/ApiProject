@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
+
 namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
 {
     public class AnimeWatchListRepository : IAnimeWatchListRepository
@@ -31,9 +32,9 @@ namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
             await _context.SaveChangesAsync();
         }
 
-        public async Task MarkAsWatched(string animeId)
+        public async Task MarkAsWatched(string animeId,Guid userId)
         {
-            var anime = _context.AnimeWatchLists.FirstOrDefault(x => x.AnimeId == animeId);
+            var anime = _context.AnimeWatchLists.FirstOrDefault(x => x.AnimeId == animeId && x.UserId == userId);
             anime.IsWatched ^= true;
             _context.Update(anime);
             _context.SaveChangesAsync();
@@ -49,14 +50,14 @@ namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
         public async Task<List<AnimeWatchList>> ViewList(Guid userId)
         {
             List<AnimeWatchList> list;
-            list = _memoryCache.Get<List<AnimeWatchList>>("anime-watchlist");
+            list = _memoryCache.Get<List<AnimeWatchList>>($"anime-watchlist{userId}");
             if(list == null)
             {
                 list = new();
                 list = await _context.AnimeWatchLists.Include(x => x.Anime)
                     .Where(x => x.UserId == userId)
                     .ToListAsync();
-                _memoryCache.Set("anime-watchlist", list,TimeSpan.FromHours(3));
+                _memoryCache.Set($"anime-watchlist{userId}", list,TimeSpan.FromHours(3));
             }
             return list;
         }

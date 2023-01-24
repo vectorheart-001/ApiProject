@@ -19,6 +19,6 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         Task<Tuple<List<Anime>,int>> GetAll(int page = 1);
         Task Edit(string id,AnimeEditDTO anime);
         Task<bool> Exists(string id);
-        Task<byte[]> TextFileStats();
+        Task<byte[]> PdfFileStats();
     }
 }

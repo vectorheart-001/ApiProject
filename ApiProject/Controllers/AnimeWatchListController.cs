@@ -48,7 +48,7 @@ namespace ApiProject.Api.Controllers
             {
                 return NotFound();
             }
-            _animeWatchListRepository.RemoveFromList(userId,animeId);
+            await _animeWatchListRepository.RemoveFromList(userId,animeId);
             return Ok();
         }
         [HttpGet("get-list")]
@@ -57,7 +57,16 @@ namespace ApiProject.Api.Controllers
         {
              return Ok(await _animeWatchListRepository.ViewList(userId));
         }
-        
+        [Authorize]
+        [HttpPut("is-watched")]
+        public async Task<IActionResult> is_Watched(string animeId)
+        {
+            string rawId = HttpContext.User.FindFirstValue("id");
+            Guid.TryParse(rawId, out Guid userId);
+            await _animeWatchListRepository.MarkAsWatched(animeId,userId);
+            return Ok();
+        }
+
 
     }
 }
