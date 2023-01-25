@@ -30,7 +30,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
             var pageResult = 15f;
             var listQuery = _context.Animes.Where(x => x.Genre.ToLower().Contains(genre));
             var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
-            if (page < 0 || page > pageCount) return Tuple.Create<List<Anime>, int>(new List<Anime>(), -1);
+            if (page <= 0 || page > pageCount) return Tuple.Create<List<Anime>, int>(new List<Anime>(), -1);
             var list = await listQuery.Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
