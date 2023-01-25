@@ -29,10 +29,12 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         {
             var pageResult = 15f;
             var listQuery = _context.Animes.Where(x => x.Genre.ToLower().Contains(genre));
+            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            if (page < 0 || page > pageCount) return Tuple.Create<List<Anime>, int>(new List<Anime>(), -1);
             var list = await listQuery.Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
-            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            
             return Tuple.Create(list, (int)pageCount);
         }
 
@@ -45,16 +47,20 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         {
             var pageResult = 15f;
             var listQuery = _context.Animes.Where(x => x.Name.ToLower().Contains(name));
+            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            if(page <= 0 || page > pageCount) return Tuple.Create<List<Anime>, int>(new List<Anime>(),-1); 
             var list = await listQuery.Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
                 .ToListAsync();
-            var pageCount = Math.Ceiling(listQuery.Count() / pageResult);
+            
             return Tuple.Create(list, (int)pageCount);
         }
-        public async Task<Tuple<List<Anime>, int>> GetAll(int page )
+        public async Task<Tuple<List<Anime>, int>> GetAll(int page)
         {
             var pageResult = 15f;
+
             var pageCount = Math.Ceiling(_context.Animes.Count()/ pageResult);
+            if (page <= 0 || page > pageCount) return Tuple.Create<List<Anime>, int>(new List<Anime>(), -1);
             List<Anime> animes= await _context.Animes
                 .Skip((page - 1) * (int)pageResult)
                 .Take((int)pageResult)
@@ -81,6 +87,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         {
             return await _context.Animes.AnyAsync(x => x.Id == id);
         }
+        
         public async Task<byte[]> PdfFileStats()
         {
             var query = _context.Animes;
@@ -134,5 +141,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
 
 
         }
+
+       
     }
 }
