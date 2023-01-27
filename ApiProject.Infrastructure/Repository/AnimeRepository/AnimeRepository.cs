@@ -12,6 +12,7 @@ using QuestPDF.Infrastructure;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SkiaSharp;
 
 namespace ApiProject.Infrastructure.Repository.AnimeRepository
 {
@@ -141,7 +142,13 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
 
 
         }
+        public async Task Delete(string id)
+        {
+            var anime = await _context.Animes.FirstOrDefaultAsync(x => x.Id == id);
+            _context.Remove(anime);
+            await _context.SaveChangesAsync();
+        }
 
-       
+
     }
 }

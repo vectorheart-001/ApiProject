@@ -10,6 +10,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
     public interface IAnimeWatchListRepository
     {
         Task AddToList(Guid userId,string animeId);
+        Task<bool> is_OnList(Guid userId,string animeId);
         Task MarkAsWatched(string animeId,Guid userId);
         Task RemoveFromList(Guid userId,string animeId);
         Task<List<AnimeWatchList>> ViewList(Guid userId);

@@ -32,6 +32,12 @@ namespace ApiProject.Infrastructure.Repository.AnimeWishListRepository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> is_OnList(Guid userId, string animeId)
+        {
+           var check = _context.AnimeWatchLists.Any(x => x.UserId == userId && x.AnimeId == animeId);
+           return check;
+        }
+
         public async Task MarkAsWatched(string animeId,Guid userId)
         {
             var anime = _context.AnimeWatchLists.FirstOrDefault(x => x.AnimeId == animeId && x.UserId == userId);

@@ -17,15 +17,15 @@ namespace ApiProject.Api.Controllers
     {
         private readonly IAnimeRepository _animeRepository;
         private readonly IUserRepository _userRepository;
-        public AnimeController(IAnimeRepository animeRepository, IUserRepository userRepository) 
+        public AnimeController(IAnimeRepository animeRepository, IUserRepository userRepository)
         {
-            _animeRepository= animeRepository;
-            _userRepository= userRepository;
+            _animeRepository = animeRepository;
+            _userRepository = userRepository;
         }
         [HttpGet("get-by-name")]
-        public async Task<IActionResult> GetByName(string name,int page =1)
+        public async Task<IActionResult> GetByName(string name, int page = 1)
         {
-            var list = await _animeRepository.GetByName(name,page);
+            var list = await _animeRepository.GetByName(name, page);
             if (list.Item2 < page || page < 0)
             {
                 return BadRequest();
@@ -33,7 +33,7 @@ namespace ApiProject.Api.Controllers
             return Ok(list);
         }
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAll([FromQuery] int page)
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1)
         {
             var list = await _animeRepository.GetAll(page);
             if (list.Item2 < page || page < 0)
@@ -44,17 +44,17 @@ namespace ApiProject.Api.Controllers
         }
         [HttpPut("edit-anime")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> EditAnime(string id,[FromBody]AnimeEditDTO anime)
+        public async Task<IActionResult> EditAnime(string id, [FromBody] AnimeEditDTO anime)
         {
             if (await _animeRepository.Exists(id) == false)
             {
                 return BadRequest();
             }
-            await _animeRepository.Edit(id,anime);
+            await _animeRepository.Edit(id, anime);
             return Ok();
         }
         [HttpGet("get-by-genre")]
-        public async Task<IActionResult> GetByGenre(string genre,int page)
+        public async Task<IActionResult> GetByGenre(string genre, int page = 1)
         {
             var list = await _animeRepository.GetByGenre(genre, page);
             if (list.Item2 < page || page < 0)
@@ -70,6 +70,17 @@ namespace ApiProject.Api.Controllers
 
             var bytes = await _animeRepository.PdfFileStats();
             return File(bytes, "application/pdf", "stats.pdf");
+        }
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(string animeId)
+        {
+            if (await _animeRepository.Exists(animeId) == false)
+            {
+                return BadRequest();
+            }
+            await _animeRepository.Delete(animeId);
+            return Ok();
         }
         
     }

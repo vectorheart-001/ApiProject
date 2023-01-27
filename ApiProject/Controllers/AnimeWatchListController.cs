@@ -63,6 +63,10 @@ namespace ApiProject.Api.Controllers
         {
             string rawId = HttpContext.User.FindFirstValue("id");
             Guid.TryParse(rawId, out Guid userId);
+            if (await _animeWatchListRepository.is_OnList(userId,animeId))
+            {
+                return BadRequest();
+            }
             await _animeWatchListRepository.MarkAsWatched(animeId,userId);
             return Ok();
         }

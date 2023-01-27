@@ -20,6 +20,7 @@ namespace ApiProject.Infrastructure.Repository.AnimeRepository
         Task Edit(string id,AnimeEditDTO anime);
         
         Task<bool> Exists(string id);
+        Task Delete(string id);
         
         Task<byte[]> PdfFileStats();
     }
